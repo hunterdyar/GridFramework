@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Bloops.GridFramework.Managers
 {
-	[CreateAssetMenu(fileName = "PuzzleManager", menuName = "Bloops/Nav/Puzzle Manager", order = 0)]
+	[CreateAssetMenu(fileName = "PuzzleManager", menuName = "Bloops/GridFramework/Puzzle Manager", order = 0)]
 	public class PuzzleManager : ScriptableObject
 	{
 		[Header("Config")]
@@ -67,7 +67,7 @@ namespace Bloops.GridFramework.Managers
 			//since we know that the tilemap init is complete, we can initiate our objects.
 			navObjectInitiation?.Invoke();//First all objects initiate, which sets their current node.
 			agentInitiation?.Invoke();//Then agents become solid and navNodes get their activeAgents, and other stuff.
-			itemInitiation?.Invoke();//finally items, doing whatever they might need to do.
+			itemInitiation?.Invoke();//finally items (and conditional checks that arent items), doing whatever they might need to do.
 			//Let things take their first turn.
 		}
 

@@ -11,7 +11,7 @@ namespace Bloops.GridFramework.Utility
 		private int[] openings => new int[] {OpenUp ? 1 : 0, OpenRight ? 1 : 0, OpenDown ? 1 : 0, OpenLeft ? 1 : 0};
 		
 		[SerializeField] public bool OpenUp;
-		[SerializeField] public bool OpenRight;
+		[SerializeField] public bool OpenRight ;
 		[SerializeField] public bool OpenDown;
 		[SerializeField] public bool OpenLeft;
 		
@@ -36,7 +36,6 @@ namespace Bloops.GridFramework.Utility
 
 		public Vector3Int[] AsV3IArray()
 		{
-		
 			List<Vector3Int> connectedDirections = new List<Vector3Int>();
 			if (OpenUp)
 			{
@@ -63,7 +62,6 @@ namespace Bloops.GridFramework.Utility
 	}
 	
 	//Enums
-	
 	public enum PathStatus
 	{
 		failure,

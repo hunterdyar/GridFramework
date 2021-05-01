@@ -18,7 +18,7 @@ namespace Bloops.GridFramework.Agents
 		[SerializeField] protected bool canMove = true;
 		protected Coroutine simpleLerpCoroutine;
 		private Action OnSnappedToNode;
-
+		public Action<SubMove> OnMoveTo;
 		public bool moving { get; protected set; }
 		protected new void OnEnable()
 		{
@@ -123,6 +123,7 @@ namespace Bloops.GridFramework.Agents
 		{
 			Assert.IsTrue(canMove);
 			simpleLerpCoroutine = StartCoroutine(SimpleMoveLerp(subMove.destinationNode, 10, contextMove));
+			OnMoveTo?.Invoke(subMove);
 		}
 		/// <summary>
 		/// Used when Redo is triggered. 

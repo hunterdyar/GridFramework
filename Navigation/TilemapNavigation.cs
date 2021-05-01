@@ -10,7 +10,7 @@ namespace Bloops.GridFramework.Navigation
 {
 	public class TilemapNavigation : MonoBehaviour
 	{
-		[FormerlySerializedAs("gameLoopManager")] public PuzzleManager puzzleManager;
+		public PuzzleManager puzzleManager;
 		public static readonly Vector3Int[] directions = new Vector3Int[]{new Vector3Int(0,1,0),new Vector3Int(1,0,0),new Vector3Int(0,-1,0),new Vector3Int(-1,0,0)};
 		public Tilemap tilemap { get; private set; }
 		[Tooltip("The grid component handles the grid, which uses a corner as worldPos/anchor. If your agents are anchored in their center, set this to half your grid size for snapping to work.")]
@@ -153,6 +153,25 @@ namespace Bloops.GridFramework.Navigation
 		public int Cost(NavNode current, NavNode next)
 		{
 			return current.pathCost + next.pathCost;
+		}
+
+		public void SetColor(NavNode node, Color col)
+		{
+			var t = tilemap.GetTile(node.cellPos);
+			tilemap.SetColor(node.cellPos,col);
+		}
+
+		public bool AnyWalkableTiles()
+		{
+			foreach (var t in map)
+			{
+				if (t.Value.walkable)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }

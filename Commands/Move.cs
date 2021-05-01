@@ -372,6 +372,7 @@ namespace Bloops.GridFramework.Commands
 				if (_allSubMoves[agentBase].Valid)
 				{
 					subMove = _allSubMoves[agentBase];
+					return true;
 				}	
 			}
 
