@@ -105,7 +105,7 @@ namespace Bloops.GridFramework.Agents
 			
 			if (_navigation.GetNode(_node.cellPos + dir, out var final))
 			{
-				if (final.walkable)
+				if (CanWalkOnNode(final))
 				{
 					return true;
 				}
@@ -212,7 +212,7 @@ namespace Bloops.GridFramework.Agents
 			
 		}
 
-		public virtual bool CanMoveToNode(NavNode destinationNode)
+		public virtual bool CanWalkOnNode(NavNode destinationNode)
 		{
 			return destinationNode.walkable;
 		}

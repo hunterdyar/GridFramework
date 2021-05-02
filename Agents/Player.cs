@@ -160,7 +160,7 @@ namespace Bloops.GridFramework.Agents
 			gameObject.SetActive(true);
 		}
 		
-		public override bool CanMoveToNode(NavNode destinationNode)
+		public override bool CanWalkOnNode(NavNode destinationNode)
 		{
 			return destinationNode.walkable && !destinationNode.painted;
 		}

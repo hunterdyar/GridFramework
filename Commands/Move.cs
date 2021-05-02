@@ -144,7 +144,7 @@ namespace Bloops.GridFramework.Commands
 			if (agentBase.puzzleManager.tilemapNavigation.GetNode(agentBase.CurrentNode.cellPos + dir, out NavNode destinationNode))
 			{
 				
-				if (agentBase.CanMoveToNode(destinationNode))
+				if (agentBase.CanWalkOnNode(destinationNode))
 				{
 					subMove = new SubMove(agentBase,agentBase.CurrentNode,agentBase.GetLocationData(), destinationNode, dir,criticalToMove,criticalForSubMove,reliesOnsubMove, subMovePriority);
 
