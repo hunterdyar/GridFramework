@@ -3,6 +3,7 @@ using Bloops.GridFramework.Agents;
 using Bloops.GridFramework.Commands;
 using Bloops.GridFramework.Items;
 using Bloops.GridFramework.Managers;
+using Bloops.Utilities;
 using UnityEngine;
 
 namespace Bloops.GridFramework.EulerPainting
@@ -10,7 +11,7 @@ namespace Bloops.GridFramework.EulerPainting
 	public class Painting : ItemBase
 	{
 		private AgentBase agent;
-		[SerializeField] private Color paintColor = Color.cyan;
+		[SerializeField] private ColorReference paintColor;
 		private void Awake()
 		{
 			agent = GetComponent<AgentBase>();
@@ -20,7 +21,7 @@ namespace Bloops.GridFramework.EulerPainting
 		{
 			base.ItemInitiation();
 			//The first one is not a command so we can undo it. This is hacky bugfix.
-			puzzleManager.tilemapNavigation.PaintTile(agent.CurrentNode,paintColor);
+			puzzleManager.tilemapNavigation.PaintTile(agent.CurrentNode,paintColor.Value);
 		}
 
 		protected new void OnEnable()
@@ -37,9 +38,8 @@ namespace Bloops.GridFramework.EulerPainting
 		
 		void PaintCurrent()
 		{
-			Paint p = new Paint(puzzleManager.tilemapNavigation, agent.CurrentNode, paintColor);
+			Paint p = new Paint(puzzleManager.tilemapNavigation, agent.CurrentNode, paintColor.Value);
 			puzzleManager.CommandManager.ExecuteCommand(p);//or exeucute AI command?
 		}
-		
 	}
 }
