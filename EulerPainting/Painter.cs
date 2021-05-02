@@ -1,8 +1,6 @@
 ﻿using System;
 using Bloops.GridFramework.Agents;
-using Bloops.GridFramework.Commands;
 using Bloops.GridFramework.Managers;
-using Bloops.GridFramework.Navigation;
 using UnityEngine;
 
 namespace Bloops.GridFramework.EulerPainting
@@ -29,9 +27,10 @@ namespace Bloops.GridFramework.EulerPainting
 		{
 			// _agentBase.OnMoveTo -= OnMoveTo;
 			puzzleManager.afterPlayerMoveComplete -= AfterPlayerMoveComplete;
+			puzzleManager.onGameReady -= Paint;
+
 		}
 		
-
 		void Paint()
 		{
 			_agentBase.CurrentNode.walkable = false;
