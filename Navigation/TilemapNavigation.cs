@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Bloops.GridFramework.DataStructures;
 using Bloops.GridFramework.Managers;
+using Bloops.Utilities;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
@@ -17,6 +18,7 @@ namespace Bloops.GridFramework.Navigation
 		public Vector3 worldPosAnchorOffset;
 		BiDictionary<Vector3Int, NavNode> map = new BiDictionary<Vector3Int, NavNode>();
 		private bool initiated = false;
+		public ColorReference defaultTileColor;
 		private void Awake()
 		{
 			initiated = false;
@@ -42,9 +44,12 @@ namespace Bloops.GridFramework.Navigation
 						NavTile nt = tilemap.GetTile(position) as NavTile; //todo z values?
 						if (nt != null)
 						{
-							NavNode node = new NavNode(position,this,nt.walkableDirections,nt.walkable);
+							NavNode node = new NavNode(position, this, nt.walkableDirections, nt.walkable);
 							RegisterTile(position, node);
-						}
+							if (defaultTileColor != null){
+								tilemap.SetColor(position, defaultTileColor.Value);
+							}
+					}
 					}
 				}
 			}
@@ -164,7 +169,7 @@ namespace Bloops.GridFramework.Navigation
 		public void UnpaintTile(NavNode node)
 		{
 			node.painted = false;
-			tilemap.SetColor(node.cellPos,Color.white);
+			tilemap.SetColor(node.cellPos,defaultTileColor.Value);
 		}
 
 		public bool AnyUnpaintedTiles()
