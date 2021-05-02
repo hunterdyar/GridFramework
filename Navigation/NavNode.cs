@@ -11,6 +11,12 @@ namespace Bloops.GridFramework.Navigation
 		public Vector3Int cellPos { get; private set; }
 		public NavDirections connections  { get; private set; }
 		public bool walkable = true;
+		public bool Walkable
+		{
+			get { return painted ? false : walkable; }
+		}
+		//Painted things
+		public bool painted = false;
 		//injected from initiation
 		public bool IsAgentHere { get; private set; }
 		public AgentBase AgentBaseHere { get; private set; }//this should be set through the SetAgentHere function.

@@ -17,7 +17,8 @@ namespace Bloops.GridFramework.Agents
 		/// </summary>
 		[SerializeField] protected bool canMove = true;
 		protected Coroutine simpleLerpCoroutine;
-		private Action OnSnappedToNode;
+		public Action OnSnappedToNode;
+		public Action OnAgentFinishedAnimatingMoveEvent;
 		public Action<SubMove> OnMoveTo;
 		public bool moving { get; protected set; }
 		protected new void OnEnable()
@@ -69,9 +70,7 @@ namespace Bloops.GridFramework.Agents
 			SnapTo(_node);
 		}
 
-
-
-
+		
 		protected virtual void OnNewSubMove(Move m, SubMove sm)
 		{
 			//if we are not already involved with the move.
@@ -206,12 +205,16 @@ namespace Bloops.GridFramework.Agents
 
 		protected virtual void OnAgentFinishedAnimatingMove()
 		{
-			
+			OnAgentFinishedAnimatingMoveEvent?.Invoke();
 		}
 		public virtual void OnOverlapItem(ItemBase item)
 		{
 			
 		}
 
+		public virtual bool CanMoveToNode(NavNode destinationNode)
+		{
+			return destinationNode.walkable;
+		}
 	}
 }

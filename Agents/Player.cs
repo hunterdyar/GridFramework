@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Bloops.GridFramework.Commands;
 using Bloops.GridFramework.Items;
 using Bloops.GridFramework.Items.Laser;
+using Bloops.GridFramework.Navigation;
 using Bloops.StateMachine;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Bloops.GridFramework.Agents
 	public class Player : AgentBase, IRemoveWithAnimation
 	{
 		 private Queue<(Vector2Int,bool)> _inputQueue;
-		 private Move _currentMove;
+		 protected Move _currentMove;
 		 private Coroutine fadeCoroutine;
 		 [Tooltip("Set this to null to test while invincible.")]
 		 [SerializeField] private Transition onDeathTransition;
@@ -22,7 +23,7 @@ namespace Bloops.GridFramework.Agents
 		 /// Fires off when the player is removed. Remember to Disable them after the desired animation is done playing. An empty string should be a default animation (ex: instant).
 		 /// </summary>
 		 public Action<string> OnRemove;
-		 //todo... singleton? gross but...
+
 		 private void Awake()
 		 {
 			 //to support future singleton or data patterns, we listen to the command manager callbacks to do clear moves, instead of doing it when we fire off undo.
@@ -82,14 +83,19 @@ namespace Bloops.GridFramework.Agents
 				 }
 				 //
 			 }
-
 		 }
+		 
 		// a player is a player because they can respond to direction input.
 		void TryNewMove((Vector2Int, bool) input)
 		{
 			//todo sanitize input dir
 			_currentMove = new Move(puzzleManager, input.Item2); //we will only store the first move as a history point.
+		
 			_currentMove.AddAgentToMove(this, new Vector3Int(input.Item1.x, input.Item1.y, 0), true, null, null, 100);
+			//
+			
+			//
+			
 			//
 			puzzleManager.ExecutePlayerCommand(_currentMove);
 			
@@ -152,6 +158,11 @@ namespace Bloops.GridFramework.Agents
 		public void EnableInstant()
 		{
 			gameObject.SetActive(true);
+		}
+		
+		public override bool CanMoveToNode(NavNode destinationNode)
+		{
+			return destinationNode.walkable && !destinationNode.painted;
 		}
 	}
 }

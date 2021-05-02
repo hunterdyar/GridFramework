@@ -111,7 +111,6 @@ namespace Bloops.GridFramework.Commands
 			//I wrote this check, and I think it fixed the issue of undo-ing during aftermooves, but...
 			//feels too easy for a fairly complex system. *squinty eyes* investigate if the problem is really fixed.
 			_afterMove?.Undo();
-
 			if (!executed)
 			{
 				Debug.LogWarning("cant undo a move that hasnt been executed?");
@@ -144,7 +143,8 @@ namespace Bloops.GridFramework.Commands
 			SubMove subMove = null;
 			if (agentBase.puzzleManager.tilemapNavigation.GetNode(agentBase.CurrentNode.cellPos + dir, out NavNode destinationNode))
 			{
-				if (destinationNode.walkable)
+				
+				if (agentBase.CanMoveToNode(destinationNode))
 				{
 					subMove = new SubMove(agentBase,agentBase.CurrentNode,agentBase.GetLocationData(), destinationNode, dir,criticalToMove,criticalForSubMove,reliesOnsubMove, subMovePriority);
 
@@ -327,12 +327,11 @@ namespace Bloops.GridFramework.Commands
 				if (executedValidAndComplete)
 				{
 					_puzzleManager.CallPreMoveComplete(this);
-					//
+					//execute afterMove
 					if (IsValid && _afterMove != null)
 					{
 						ExecuteAfterMove();
 					}
-					//
 					_puzzleManager.CallPostMoveComplete(this);
 				}
 			}

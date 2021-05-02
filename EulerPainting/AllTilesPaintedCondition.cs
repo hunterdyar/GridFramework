@@ -29,6 +29,6 @@ public class AllTilesPaintedCondition : MonoBehaviour, ICondition
     }
     public bool GetCondition()
     {
-        return !puzzleManager.tilemapNavigation.AnyWalkableTiles();
+        return !puzzleManager.tilemapNavigation.AnyUnpaintedTiles();
     }
 }

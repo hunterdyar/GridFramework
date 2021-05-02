@@ -155,17 +155,23 @@ namespace Bloops.GridFramework.Navigation
 			return current.pathCost + next.pathCost;
 		}
 
-		public void SetColor(NavNode node, Color col)
+		public void PaintTile(NavNode node, Color col)
 		{
-			var t = tilemap.GetTile(node.cellPos);
+			node.painted = true;
 			tilemap.SetColor(node.cellPos,col);
 		}
 
-		public bool AnyWalkableTiles()
+		public void UnpaintTile(NavNode node)
+		{
+			node.painted = false;
+			tilemap.SetColor(node.cellPos,Color.white);
+		}
+
+		public bool AnyUnpaintedTiles()
 		{
 			foreach (var t in map)
 			{
-				if (t.Value.walkable)
+				if (!t.Value.painted)
 				{
 					return true;
 				}
