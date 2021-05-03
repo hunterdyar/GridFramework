@@ -69,7 +69,7 @@ namespace Bloops.GridFramework.Commands
 
 			if (Critical)
 			{
-				
+				//dont ask im afraid to touch what isnt broken
 			}
 		}
 		public void SetFinished(bool isFinished)

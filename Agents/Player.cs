@@ -12,7 +12,7 @@ namespace Bloops.GridFramework.Agents
 {
 	public class Player : AgentBase, IRemoveWithAnimation
 	{
-		 private Queue<(Vector2Int,bool)> _inputQueue;
+		 protected Queue<(Vector2Int,bool)> _inputQueue;
 		 protected Move _currentMove;
 		 private Coroutine fadeCoroutine;
 		 [Tooltip("Set this to null to test while invincible.")]
@@ -64,8 +64,12 @@ namespace Bloops.GridFramework.Agents
 			 _inputQueue.Enqueue((dir,historyState));
 		 }
 
-		 private void Update()
+		 protected virtual void Update()
 		 {
+			 if (moving && _currentMove == null)
+             {
+                 return;//this is an edge case for zombies and multi move.
+             }
 			 if (!moving && _currentMove == null || _currentMove.readyToMoveOn)
 			 {
 				 if (_inputQueue.Count > 0 && puzzleManager.PlayerCanMove())
@@ -86,25 +90,19 @@ namespace Bloops.GridFramework.Agents
 		 }
 		 
 		// a player is a player because they can respond to direction input.
-		void TryNewMove((Vector2Int, bool) input)
+		protected virtual void TryNewMove((Vector2Int, bool) input)
 		{
-			//todo sanitize input dir
 			_currentMove = new Move(puzzleManager, input.Item2); //we will only store the first move as a history point.
 		
 			_currentMove.AddAgentToMove(this, new Vector3Int(input.Item1.x, input.Item1.y, 0), true, null, null, 100);
-			//
-			
-			//
-			
-			//
+
 			puzzleManager.ExecutePlayerCommand(_currentMove);
 			
 			//todo I think we can override the OnMoveAnimationFinished but idk
 			StartCoroutine(WaitForMoveToFinishThenUpdateGameLoop(_currentMove));
-			
 		}
 
-		IEnumerator WaitForMoveToFinishThenUpdateGameLoop(Move move)
+		protected IEnumerator WaitForMoveToFinishThenUpdateGameLoop(Move move)
 		{
 			//todo multiple players would want to check against a (static?) list of moves....
 			while (!move.readyToMoveOn)
@@ -163,6 +161,11 @@ namespace Bloops.GridFramework.Agents
 		public override bool CanWalkOnNode(NavNode destinationNode)
 		{
 			return destinationNode.walkable && !destinationNode.painted;
+		}
+
+		public void ForceOverrideCurrentMove(Move newMove)
+		{
+			_currentMove = newMove;
 		}
 	}
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Bloops.GridFramework.Commands;
 using Bloops.GridFramework.Items;
 using Bloops.GridFramework.Managers;
 using Bloops.GridFramework.Navigation;
+using Bloops.GridFramework.Utility;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
@@ -114,6 +116,21 @@ namespace Bloops.GridFramework.Agents
 			return false;
 		}
 
+		public virtual int CanMoveInDirs(out Vector3Int[] dirs)
+		{
+			List<Vector3Int> dls = new List<Vector3Int>();
+			foreach (var d in TilemapNavigation.directions)
+			{
+				if (CanMoveInDir(d))
+				{
+					dls.Add(d);
+				}
+			}
+
+			dirs = dls.ToArray();
+			return dls.Count;
+		}
+
 		//override this and implement animation logic.
 
 		//I use DOTween, but this starts a simple coroutine.
@@ -157,7 +174,7 @@ namespace Bloops.GridFramework.Agents
 			return false;
 		}
 
-		public void SetCurrentNode(NavNode newNode)
+		public virtual void SetCurrentNode(NavNode newNode)
 		{
 			if (_node != null)
 			{

@@ -199,7 +199,7 @@ namespace Bloops.GridFramework.Commands
 		private void CheckValid()
 		{
 			
-			//we need tocheck if multiple elements involved share the sameAgent.
+			//we need to check if multiple elements involved share the sameAgent.
 			foreach (var akp in _allSubMoves)
 			{
 				if (!akp.Value.Valid)
@@ -231,7 +231,6 @@ namespace Bloops.GridFramework.Commands
 
 			foreach (var akp in _allSubMoves)
 			{
-				
 				if (akp.Value.reliesOnAgentMoving.Count > 0)
 				{
 					bool reliesOnAgentThatIsntMoving = true;
@@ -276,16 +275,33 @@ namespace Bloops.GridFramework.Commands
 				}
 			}
 			
+			
+			
 			//Finally, we have sequentally propagted through everything!
 			//There is one optimizaiton todo... optimize
 			//When we Invalidate SubMoves at the time of original propogation (in the tileAgent event), we can't recursively invalidate the ones they rely on.
 			//Thats because the subMoves might end up replaced entirely as a different element tries to move an actor.
 			//So an optimization is to write an InvalidateRecusrively or InvalidateTotally function that we only use here, in the once-dust-settles check.
 			//that should remove the above two loops.
-			foreach (var akp in _allSubMoves.Where(akp => !akp.Value.Valid && akp.Value.Critical))
+			
+			//count the number of valid submoves. We need at least one no matter what.
+			//this check is only needed for a weird edgeCase with multiPlayayer and zombie players, since the players moves arent neccesarily critical.
+			//no submoves were critical, so no subMoves invalidated the move, even though nothing happened when none were valid. 
+			//This added a useless move to the history and undo state and caused bugs.
+			if( _allSubMoves.Count(akp => akp.Value.Valid) == 0)
 			{
-				IsValid = false;
+				//IsValid = false;
 			}
+
+			if (IsValid)//i dont know which of the two checks is more performant, but looking at this entire script, thats kind of a lost cause huh. optimizing this would be an insult to those above loops.
+			{
+				//Check that any of our invalid moves are not move critical.
+				foreach (var akp in _allSubMoves.Where(akp => !akp.Value.Valid && akp.Value.Critical))
+				{
+					IsValid = false;
+				}
+			}
+
 		}
 
 		public SubMove GetSubMoveWithDestination(NavNode destinationNode)
@@ -299,6 +315,7 @@ namespace Bloops.GridFramework.Commands
 			}
 			return null;
 		}
+		
 		public bool SubMoveHasDestination(NavNode destinationNode)
 		{
 			foreach (var sm in _allSubMoves.Values)
@@ -335,7 +352,6 @@ namespace Bloops.GridFramework.Commands
 					_puzzleManager.CallPostMoveComplete(this);
 				}
 			}
-			
 		}
 
 		public List<SubMove> GetValidSubMoves()
@@ -344,6 +360,7 @@ namespace Bloops.GridFramework.Commands
 			return _allSubMoves.Values.Where(x => x.Valid == true).ToList();
 			//return new List<SubMove>();
 		}
+		
 		public bool IsInvolved(AgentBase agentBase)
 		{
 			return _allSubMoves.ContainsKey(agentBase);
