@@ -1,6 +1,5 @@
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Bloops.GridFramework.Agents;
 using Bloops.StateMachine;
 using UnityEngine;
@@ -51,5 +50,7 @@ namespace Bloops.GridFramework.Input
                 }
             }
         }
+
+       
     }
 }

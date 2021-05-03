@@ -8,6 +8,8 @@ using UnityEngine;
 
 namespace Bloops.GridFramework.EulerPainting
 {
+	
+	//Todo: This can be a monobehavior?
 	public class Painting : ItemBase
 	{
 		private AgentBase agent;

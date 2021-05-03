@@ -1,25 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Bloops.LevelManager;
 using Bloops.StateMachine;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class RestartGameInput : MonoBehaviour
+namespace Bloops.GridFramework.Input
 {
-    public LevelsManager levelManager;
-    [SerializeField] private State[] DependantOnStates;
-
-    // Update is called once per frame
-    void Update()
+    public class RestartGameInput : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        public LevelsManager levelManager;
+        [SerializeField] private State[] DependantOnStates;
+
+        // Update is called once per frame
+        void Update()
         {
-            if (DependantOnStates.Any(s => s.IsActive))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.R))
             {
-                levelManager.RestartCurrentLevel();
+                if (DependantOnStates.Any(s => s.IsActive))
+                {
+                    levelManager.RestartCurrentLevel();
+                }
             }
         }
     }
+
 }

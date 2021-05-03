@@ -160,7 +160,7 @@ namespace Bloops.GridFramework.Agents
 		
 		public override bool CanWalkOnNode(NavNode destinationNode)
 		{
-			return destinationNode.walkable && !destinationNode.painted;
+			return !destinationNode.painted;
 		}
 
 		public void ForceOverrideCurrentMove(Move newMove)

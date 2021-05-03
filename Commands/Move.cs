@@ -70,11 +70,7 @@ namespace Bloops.GridFramework.Commands
 			_isComplete = false;
 			CheckValid();
 			
-			//no agents got added? This isn't a move!
-			if (_allSubMoves.Count == 0)
-			{
-				IsValid = false;
-			}
+			
 			//
 			if (IsValid)
 			{
@@ -198,6 +194,12 @@ namespace Bloops.GridFramework.Commands
 
 		private void CheckValid()
 		{
+			//no agents got added? This isn't a move!
+			if (_allSubMoves.Count == 0)
+			{
+				IsValid = false;
+				return;
+			}
 			
 			//we need to check if multiple elements involved share the sameAgent.
 			foreach (var akp in _allSubMoves)
@@ -290,17 +292,18 @@ namespace Bloops.GridFramework.Commands
 			//This added a useless move to the history and undo state and caused bugs.
 			if( _allSubMoves.Count(akp => akp.Value.Valid) == 0)
 			{
-				//IsValid = false;
+				IsValid = false;
+				return;
 			}
 
-			if (IsValid)//i dont know which of the two checks is more performant, but looking at this entire script, thats kind of a lost cause huh. optimizing this would be an insult to those above loops.
+			
+			//Check that any of our invalid moves are not move critical.
+			foreach (var akp in _allSubMoves.Where(akp => !akp.Value.Valid && akp.Value.Critical))
 			{
-				//Check that any of our invalid moves are not move critical.
-				foreach (var akp in _allSubMoves.Where(akp => !akp.Value.Valid && akp.Value.Critical))
-				{
-					IsValid = false;
-				}
+				IsValid = false;
+				return;
 			}
+			
 
 		}
 

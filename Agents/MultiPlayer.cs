@@ -4,7 +4,6 @@ using System.Linq;
 using Bloops.GridFramework.Agents;
 using Bloops.GridFramework.Commands;
 using Bloops.GridFramework.Navigation;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class MultiPlayer : Player
@@ -72,11 +71,6 @@ public class MultiPlayer : Player
 				break;
 			}
 		}
-		
-		
-		
 		base.Update();
-		
-		
 	}
 }
