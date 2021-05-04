@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Bloops.GridFramework.DataStructures;
@@ -21,6 +22,11 @@ namespace Bloops.GridFramework.Navigation
 		BiDictionary<Vector3Int, NavNode> map = new BiDictionary<Vector3Int, NavNode>();
 		private bool initiated = false;
 		public ColorReference defaultTileColor;
+		private Vector3Int _min;
+		private Vector3Int _max;
+		public Vector3Int Min => _min;
+		public Vector3Int Max => _max;
+		
 		private void Awake()
 		{
 			initiated = false;
@@ -28,13 +34,16 @@ namespace Bloops.GridFramework.Navigation
 			tilemap = GetComponent<Tilemap>();
 			InitiateTiles();
 		}
-
+		//INitiate tiles could be called bu the puzzle manager.
 		private void InitiateTiles()
 		{
 			initiated = true;
 			//if we do this at runtime, not for initialization, theres probably gonna need to be event unregistering and memory management issues. I dont have events yet soooo
 			map.Clear();
-			
+			//reset min and max to improbable states.
+			_max = new Vector3Int(Int32.MinValue, Int32.MinValue, 0);
+			_min = new Vector3Int(Int32.MaxValue, Int32.MaxValue, 0);
+
 			BoundsInt bounds = tilemap.cellBounds;
 			for (int x = bounds.xMin; x <= bounds.xMax; x++)
 			{
@@ -46,16 +55,19 @@ namespace Bloops.GridFramework.Navigation
 						NavTile nt = tilemap.GetTile(position) as NavTile; //todo z values?
 						if (nt != null)
 						{
+							//Create NavNode
 							NavNode node = new NavNode(position, this, nt.walkableDirections, nt.walkable);
 							RegisterTile(position, node);
 							if (defaultTileColor != null){
-								tilemap.SetColor(position, defaultTileColor.Value);
+								tilemap.SetColor(position, defaultTileColor.Value); 
 							}
-					}
+							//Adjust Min and Max
+							_min = new Vector3Int(Mathf.Min(_min.x, position.x), Mathf.Min(_min.y, position.y), 0);
+							_max = new Vector3Int(Mathf.Max(_max.x, position.x), Mathf.Max(_max.y, position.y), 0);
+						}
 					}
 				}
 			}
-
 		}
 
 		public void RegisterTile(Vector3Int position,NavNode navNode)
