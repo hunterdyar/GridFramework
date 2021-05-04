@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Bloops.GridFramework.DataStructures;
 using Bloops.GridFramework.Managers;
 using Bloops.Utilities;
@@ -183,6 +185,11 @@ namespace Bloops.GridFramework.Navigation
 			}
 
 			return false;
+		}
+
+		public Vector3Int[] GetPositions()
+		{
+			return map.KeyMap.Keys.ToArray();
 		}
 	}
 }
