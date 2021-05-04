@@ -20,6 +20,16 @@ public class MultiPlayer : Player
 		return;
 	}
 
+	protected override void AgentInitiation()
+	{
+		base.AgentInitiation();
+		if (players.Length == 0)
+		{
+			players = GameObject.FindObjectsOfType<Player>();
+			players = players.Where(p => p != this).ToArray();
+		}
+	}
+
 	protected override void TryNewMove((Vector2Int, bool) input)
 	{
 		_currentMove = new Move(puzzleManager, input.Item2); //we will only store the first move as a history point.
@@ -38,11 +48,11 @@ public class MultiPlayer : Player
 	public override int CanMoveInDirs(out Vector3Int[] dirs)
 	{
 		HashSet<Vector3Int> dls = new HashSet<Vector3Int>();
-		foreach (var ab in players)
+		foreach (var p in players)
 		{
 			foreach (var d in TilemapNavigation.directions)
 			{
-				if (CanMoveInDir(d))
+				if (p.CanMoveInDir(d))
 				{
 					dls.Add(d);
 				}
@@ -52,7 +62,7 @@ public class MultiPlayer : Player
 		dirs = dls.ToArray();
 		return dls.Count;
 	}
-
+	
 	protected override void OnNewSubMove(Move m, SubMove sm)
 	{
 		//"accidentally in the scene" error prevention.

@@ -98,7 +98,7 @@ namespace Bloops.GridFramework.Agents
 		/// <summary>
 		/// Returns true or false if this agent can move in a direction. Ignores other agents that may be pushed!
 		/// </summary>
-		protected virtual bool CanMoveInDir(Vector3Int dir)
+		public virtual bool CanMoveInDir(Vector3Int dir)
 		{
 			if (!canMove)
 			{
