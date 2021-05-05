@@ -15,6 +15,8 @@ namespace Bloops.GridFramework.Commands
 		public Action OnRedo;
 		private int maxUndo = -1;
 		private PuzzleManager _puzzleManager;
+		public bool CanUndo => history.Count > 0;//todo this might not be true,because of history points, but should be true when not undo-ing....
+		public bool CanRedo => redos.Count > 0;
 		public CommandManager(int maxUndoAmt = -1)
 		{
 			Init(null);
@@ -39,7 +41,6 @@ namespace Bloops.GridFramework.Commands
 
 				if (history.PeekTop() is Move topAsMove)
 				{
-					
 					//After we undo, lets re-collect items or get killed by lasers or whatever, if that was where we were.
 					if (topAsMove.executedValidAndComplete)
 					{

@@ -70,7 +70,8 @@ namespace Bloops.GridFramework.Managers
 			itemInitiation?.Invoke();//finally items (and conditional checks that arent items), doing whatever they might need to do.
 			//Let things take their first turn.
 		}
-
+		
+		
 
 		//Called by the puzzle manager initiator right after AgentInitiation.
 		public void Start()
@@ -194,5 +195,15 @@ namespace Bloops.GridFramework.Managers
 			postMoveComplete?.Invoke(move);
 		}
 
+		//undo/redo wrapper so we can call these functions from like UnityEvents, ie dropping puzzleManager into an onCLickevent for a button
+		public void Undo()
+		{
+			CommandManager.Undo();
+		}
+
+		public void Redo()
+		{
+			CommandManager.Redo();
+		}
 	}
 }

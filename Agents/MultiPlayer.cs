@@ -30,19 +30,31 @@ public class MultiPlayer : Player
 		}
 	}
 
+	
 	protected override void TryNewMove((Vector2Int, bool) input)
 	{
-		_currentMove = new Move(puzzleManager, input.Item2); //we will only store the first move as a history point.
-
-		foreach (var ab in players)
+		//_currentMove = new Move(puzzleManager, input.Item2); //we will only store the first move as a history point.
+		var moves = new List<Move>();
+		for(int i = 0;i<players.Length;i++)
 		{
-			_currentMove.AddAgentToMove(ab, new Vector3Int(input.Item1.x, input.Item1.y, 0), false, null, null, 100);
+			var m = new Move(puzzleManager, input.Item2 && i == 0);//only the first one should be a history state.
+			m.AddAgentToMove(players[i], new Vector3Int(input.Item1.x, input.Item1.y, 0), false, null, null, 100);
 			// ab.ForceOverrideCurrentMove(_currentMove);
+			moves.Add(m);
 		}
-
-		puzzleManager.ExecutePlayerCommand(_currentMove);
-
-		StartCoroutine(WaitForMoveToFinishThenUpdateGameLoop(_currentMove));
+		
+		foreach (Move m in moves)
+		{
+			puzzleManager.ExecutePlayerCommand(m);
+			if (m.IsValid)
+			{
+				_currentMove = m;
+			}
+		}
+		
+		foreach(Move m in moves){
+			StartCoroutine(WaitForMoveToFinishThenUpdateGameLoop(_currentMove));
+		}
 	}
 
 	public override int CanMoveInDirs(out Vector3Int[] dirs)
