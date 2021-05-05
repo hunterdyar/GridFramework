@@ -38,9 +38,15 @@ public class MultiPlayer : Player
 		for(int i = 0;i<players.Length;i++)
 		{
 			var m = new Move(puzzleManager, input.Item2 && i == 0);//only the first one should be a history state.
-			m.AddAgentToMove(players[i], new Vector3Int(input.Item1.x, input.Item1.y, 0), false, null, null, 100);
-			// ab.ForceOverrideCurrentMove(_currentMove);
-			moves.Add(m);
+			bool alreadyInvolved = false;
+
+			//check that we aren't already involved in a move. If another player pushes this player, then this player should just get pushed.
+			if (moves.Count(move => move.IsInvolved(players[i])) == 0)
+			{
+				m.AddAgentToMove(players[i], new Vector3Int(input.Item1.x, input.Item1.y, 0), false, null, null, 100);
+				// ab.ForceOverrideCurrentMove(_currentMove);
+				moves.Add(m);
+			}
 		}
 		
 		foreach (Move m in moves)
