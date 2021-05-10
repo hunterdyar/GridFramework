@@ -32,5 +32,10 @@
 		{
 			_maxTurns = maxTurnsToWinPuzzle;
 		}
+
+		public void Reset()
+		{
+			_turns = 0;
+		}
 	}
 }

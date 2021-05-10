@@ -56,6 +56,7 @@ namespace Bloops.GridFramework.Managers
 			holdingForAI = new List<AIBase>();
 			//First, initiate our systems.
 			CommandManager.Init(this);
+			TurnCounter.Reset();
 			if (puzzleHasMaxTurns)
 			{
 				TurnCounter.SetMaxTurns(maxTurnsToWinPuzzle);

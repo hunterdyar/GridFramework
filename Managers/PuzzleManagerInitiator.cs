@@ -7,8 +7,6 @@ using UnityEngine;
 public class PuzzleManagerInitiator : MonoBehaviour
 {
     public PuzzleManager manager;
-
-    // Update is called once per frame
     IEnumerator Start()
     {
         manager.Initiate();

@@ -7,7 +7,6 @@ namespace Bloops.GridFramework.Input
 {
     public class RestartGameInput : MonoBehaviour
     {
-        public LevelsManager levelManager;
         [SerializeField] private State[] DependantOnStates;
 
         // Update is called once per frame
@@ -17,7 +16,7 @@ namespace Bloops.GridFramework.Input
             {
                 if (DependantOnStates.Any(s => s.IsActive))
                 {
-                    levelManager.RestartCurrentLevel();
+                    LevelsManager.RestartCurrentLevel();
                 }
             }
         }
